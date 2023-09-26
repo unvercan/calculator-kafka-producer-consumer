@@ -5,13 +5,13 @@ import lombok.*;
 
 import java.util.UUID;
 
-@Entity
-@Table
 @Getter
 @Setter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@Entity(name = "sample")
+@Table(name = "sample")
 public class Sample {
 
     @Id

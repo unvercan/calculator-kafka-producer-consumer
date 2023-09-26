@@ -1,0 +1,48 @@
+# Core
+server:
+  port: 3500
+
+spring:
+  # SQL Datasource
+  datasource:
+    url: jdbc:h2:mem:data-db
+    driverClassName: org.h2.Driver
+    username: admin
+    password: 12345
+
+  # JPA and Hibernate
+  jpa:
+    hibernate:
+      ddl-auto: create
+    database-platform: org.hibernate.dialect.H2Dialect
+    properties:
+      hibernate:
+        show_sql: true
+        format_sql: true
+        globally_quoted_identifiers: true
+
+  # H2 Database
+  h2:
+    console:
+      enabled: true
+      path: /h2
+
+  # Kafka
+  #  kafka:
+  #    bootstrap-servers: localhost:9092
+  #    topic:
+  #      sql: data-sql
+  #      nosql: data-sql
+  #    group-id: data-group
+
+  # NoSQL Datasource
+  #  data:
+  #    mongodb:
+  #      host: localhost
+  #      port: 27017
+  #      database: data-db
+
+# OpenAPI
+springdoc:
+  swagger-ui:
+    path: /api-doc

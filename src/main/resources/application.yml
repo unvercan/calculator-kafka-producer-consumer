@@ -28,19 +28,17 @@ spring:
       path: /h2
 
   # Kafka
-  #  kafka:
-  #    bootstrap-servers: localhost:9092
-  #    topic:
-  #      sql: data-sql
-  #      nosql: data-sql
-  #    group-id: data-group
+  kafka:
+    bootstrap-servers: localhost:9092
+    topic: sample
+    group-id: sample-group
 
   # NoSQL Datasource
   #  data:
   #    mongodb:
   #      host: localhost
   #      port: 27017
-  #      database: data-db
+  #      database: sample-db
 
 # OpenAPI
 springdoc:

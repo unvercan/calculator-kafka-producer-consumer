@@ -34,11 +34,11 @@ spring:
     group-id: sample-group
 
   # NoSQL Datasource
-  #  data:
-  #    mongodb:
-  #      host: localhost
-  #      port: 27017
-  #      database: sample-db
+  data:
+    mongodb:
+      host: localhost
+      port: 27017
+      database: sum-db
 
 # OpenAPI
 springdoc:

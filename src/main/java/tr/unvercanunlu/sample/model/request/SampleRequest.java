@@ -1,15 +1,15 @@
 package tr.unvercanunlu.sample.model.request;
 
 import jakarta.validation.constraints.*;
-import lombok.*;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.io.Serializable;
 
 @Getter
 @Setter
 @Builder
-@NoArgsConstructor
-@AllArgsConstructor
 public class SampleRequest implements Serializable {
 
     @Positive(message = "First value should be positive integer.")

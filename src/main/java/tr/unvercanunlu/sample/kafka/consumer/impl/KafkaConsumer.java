@@ -7,10 +7,14 @@ import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Component;
 import tr.unvercanunlu.sample.kafka.consumer.IKafkaConsumer;
 import tr.unvercanunlu.sample.model.entity.Sample;
+import tr.unvercanunlu.sample.model.entity.Sum;
+import tr.unvercanunlu.sample.repository.ISumRepository;
 
 @Component
 @RequiredArgsConstructor
 public class KafkaConsumer implements IKafkaConsumer<String, Sample> {
+
+    private final ISumRepository sumRepository;
 
     @SneakyThrows
     @Override
@@ -23,6 +27,13 @@ public class KafkaConsumer implements IKafkaConsumer<String, Sample> {
                 "Key: " + key + ". " +
                 "Value: " + "Sample{first=" + value.getFirst() + " , second=" + value.getSecond() + "}"
         );
+
+        Sum sum = Sum.builder()
+                .id(value.getId())
+                .third(value.getFirst() + value.getSecond())
+                .build();
+
+        this.sumRepository.save(sum);
     }
 
 }

@@ -1,6 +1,5 @@
 package tr.unvercanunlu.sample.controller.impl;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
@@ -21,25 +20,26 @@ import java.util.UUID;
 import java.util.function.Supplier;
 import java.util.stream.IntStream;
 
-@RequiredArgsConstructor
 @RestController
+@RequiredArgsConstructor
 @RequestMapping(path = ApiConfig.SAMPLE_API)
 public class SampleController implements ISampleController {
-
-    private final IKafkaProducer<String, Sample> kafkaProducer;
-    private final ISampleService sampleService;
 
     private static final Random random = new Random();
 
     private static final Supplier<Integer> randomGenerator = () -> 1 + random.nextInt(10);
+
+    private final IKafkaProducer<String, Sample> kafkaProducer;
+
+    private final ISampleService sampleService;
+
+    private final ISampleRepository sampleRepository;
+
     @Value(value = "${spring.kafka.topic}")
     private String topic;
 
-    private final ISampleRepository sampleRepository;
-    private ObjectMapper objectMapper;
-
     @Override
-    @RequestMapping(path = "/", method = RequestMethod.GET)
+    @RequestMapping(method = RequestMethod.GET)
     public ResponseEntity<List<Sample>> getAll() {
         List<Sample> sampleList = this.sampleService.getAll();
 
@@ -67,7 +67,7 @@ public class SampleController implements ISampleController {
     }
 
     @Override
-    @RequestMapping(path = "/", method = RequestMethod.POST)
+    @RequestMapping(method = RequestMethod.POST)
     public ResponseEntity<Sample> add(@RequestBody SampleRequest request) {
         Sample sample = Sample.builder()
                 .first(request.getFirst())

@@ -8,4 +8,6 @@ public class ApiConfig {
 
     public static final String SAMPLE_API = BASE + "/" + "sample";
 
+    public static final String SUM_API = BASE + "/" + "sum";
+
 }

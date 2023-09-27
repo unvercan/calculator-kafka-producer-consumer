@@ -1,4 +1,4 @@
-package tr.unvercanunlu.compare_match.model.request;
+package tr.unvercanunlu.sample.model.request;
 
 import jakarta.validation.constraints.*;
 import lombok.*;

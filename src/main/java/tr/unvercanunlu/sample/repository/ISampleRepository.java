@@ -1,8 +1,8 @@
-package tr.unvercanunlu.compare_match.repository;
+package tr.unvercanunlu.sample.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
-import tr.unvercanunlu.compare_match.model.entity.Sample;
+import tr.unvercanunlu.sample.model.entity.Sample;
 
 import java.util.UUID;
 

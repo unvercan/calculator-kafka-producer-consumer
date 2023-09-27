@@ -1,4 +1,4 @@
-package tr.unvercanunlu.compare_match.config;
+package tr.unvercanunlu.sample.config;
 
 public class ApiConfig {
 

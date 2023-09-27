@@ -1,4 +1,4 @@
-package tr.unvercanunlu.compare_match.model.entity;
+package tr.unvercanunlu.sample.model.entity;
 
 import jakarta.persistence.*;
 import lombok.*;

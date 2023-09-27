@@ -1,4 +1,4 @@
-package tr.unvercanunlu.compare_match.config.kafka;
+package tr.unvercanunlu.sample.config.kafka;
 
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.common.serialization.StringDeserializer;

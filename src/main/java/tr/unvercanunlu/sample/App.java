@@ -1,4 +1,4 @@
-package tr.unvercanunlu.compare_match;
+package tr.unvercanunlu.sample;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

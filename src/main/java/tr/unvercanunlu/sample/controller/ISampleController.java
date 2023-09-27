@@ -1,11 +1,11 @@
-package tr.unvercanunlu.compare_match.controller;
+package tr.unvercanunlu.sample.controller;
 
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.*;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
-import tr.unvercanunlu.compare_match.entity.Sample;
-import tr.unvercanunlu.compare_match.request.SampleRequest;
+import tr.unvercanunlu.sample.model.entity.Sample;
+import tr.unvercanunlu.sample.model.request.SampleRequest;
 
 import java.util.List;
 import java.util.UUID;
@@ -38,5 +38,7 @@ public interface ISampleController {
             @Digits(integer = 4, fraction = 0, message = "Count should be integer and at max one thousand.")
             String count
     );
+
+    ResponseEntity<Void> populate();
 
 }

@@ -1,17 +1,21 @@
-package tr.unvercanunlu.compare_match.controller.impl;
+package tr.unvercanunlu.sample.controller.impl;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import tr.unvercanunlu.compare_match.controller.ISampleController;
-import tr.unvercanunlu.compare_match.dao.ISampleRepository;
-import tr.unvercanunlu.compare_match.entity.Sample;
-import tr.unvercanunlu.compare_match.request.SampleRequest;
+import tr.unvercanunlu.sample.config.ApiConfig;
+import tr.unvercanunlu.sample.controller.ISampleController;
+import tr.unvercanunlu.sample.kafka.producer.IKafkaProducer;
+import tr.unvercanunlu.sample.model.entity.Sample;
+import tr.unvercanunlu.sample.model.request.SampleRequest;
+import tr.unvercanunlu.sample.repository.ISampleRepository;
+import tr.unvercanunlu.sample.service.ISampleService;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.Random;
 import java.util.UUID;
 import java.util.function.Supplier;
@@ -19,19 +23,25 @@ import java.util.stream.IntStream;
 
 @RequiredArgsConstructor
 @RestController
-@RequestMapping(path = "/" + "api" + "/" + "v1" + "/" + "sample")
+@RequestMapping(path = ApiConfig.SAMPLE_API)
 public class SampleController implements ISampleController {
+
+    private final IKafkaProducer<String, Sample> kafkaProducer;
+    private final ISampleService sampleService;
 
     private static final Random random = new Random();
 
     private static final Supplier<Integer> randomGenerator = () -> 1 + random.nextInt(10);
+    @Value(value = "${spring.kafka.topic}")
+    private String topic;
 
     private final ISampleRepository sampleRepository;
+    private ObjectMapper objectMapper;
 
     @Override
     @RequestMapping(path = "/", method = RequestMethod.GET)
     public ResponseEntity<List<Sample>> getAll() {
-        List<Sample> sampleList = this.sampleRepository.findAll();
+        List<Sample> sampleList = this.sampleService.getAll();
 
         return ResponseEntity.status(HttpStatus.OK.value())
                 .contentType(MediaType.APPLICATION_JSON)
@@ -41,39 +51,19 @@ public class SampleController implements ISampleController {
     @Override
     @RequestMapping(path = "/{id}", method = RequestMethod.GET)
     public ResponseEntity<Sample> get(@PathVariable(name = "id") UUID id) {
-        Optional<Sample> optionalSample = this.sampleRepository.findById(id);
+        Sample sample = this.sampleService.get(id);
 
-        ResponseEntity<Sample> response;
-
-        if (optionalSample.isPresent()) {
-            Sample sample = optionalSample.get();
-
-            response = ResponseEntity.status(HttpStatus.OK.value())
-                    .contentType(MediaType.APPLICATION_JSON)
-                    .body(sample);
-        } else {
-            response = ResponseEntity.status(HttpStatus.NOT_FOUND.value()).build();
-        }
-
-        return response;
+        return ResponseEntity.status(HttpStatus.OK.value())
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(sample);
     }
 
     @Override
     @RequestMapping(path = "/{id}", method = RequestMethod.DELETE)
     public ResponseEntity<Void> delete(@PathVariable(name = "id") UUID id) {
-        Optional<Sample> optionalSample = this.sampleRepository.findById(id);
+        this.sampleService.delete(id);
 
-        ResponseEntity<Void> response;
-
-        if (optionalSample.isPresent()) {
-            this.sampleRepository.deleteById(id);
-
-            response = ResponseEntity.status(HttpStatus.OK.value()).build();
-        } else {
-            response = ResponseEntity.status(HttpStatus.NOT_FOUND.value()).build();
-        }
-
-        return response;
+        return ResponseEntity.status(HttpStatus.OK.value()).build();
     }
 
     @Override
@@ -120,6 +110,17 @@ public class SampleController implements ISampleController {
         return ResponseEntity.status(HttpStatus.OK.value())
                 .contentType(MediaType.APPLICATION_JSON)
                 .body(sampleList);
+    }
+
+    @Override
+    @RequestMapping(path = "/populate", method = RequestMethod.POST)
+    public ResponseEntity<Void> populate() {
+        List<Sample> sampleList = this.sampleRepository.findAll();
+
+        sampleList.forEach(sample -> this.kafkaProducer.send(
+                this.topic, sample.getId().toString(), sample));
+
+        return ResponseEntity.status(HttpStatus.OK.value()).build();
     }
 
 }

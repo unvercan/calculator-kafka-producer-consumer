@@ -8,13 +8,13 @@ import tr.unvercanunlu.sample.model.entity.Sample;
 
 @Component
 @RequiredArgsConstructor
-public class KafkaProducer implements IKafkaProducer<String, Sample> {
+public class KafkaSampleProducer implements IKafkaProducer<String, Sample> {
 
-    private final KafkaTemplate<String, Sample> kafkaTemplate;
+    private final KafkaTemplate<String, Sample> sampleKafkaTemplate;
 
     @Override
     public void send(String topic, String key, Sample value) {
-        this.kafkaTemplate.send(topic, key, value);
+        this.sampleKafkaTemplate.send(topic, key, value);
 
         System.out.println("Sample is sent. " +
                 "Key: " + key + ". " +

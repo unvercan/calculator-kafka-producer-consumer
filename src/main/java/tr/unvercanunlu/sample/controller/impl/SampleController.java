@@ -29,7 +29,7 @@ public class SampleController implements ISampleController {
 
     private static final Supplier<Integer> randomGenerator = () -> 1 + random.nextInt(10);
 
-    private final IKafkaProducer<String, Sample> kafkaProducer;
+    private final IKafkaProducer<String, Sample> sampleKafkaProducer;
 
     private final ISampleService sampleService;
 
@@ -117,7 +117,7 @@ public class SampleController implements ISampleController {
     public ResponseEntity<Void> populate() {
         List<Sample> sampleList = this.sampleRepository.findAll();
 
-        sampleList.forEach(sample -> this.kafkaProducer.send(
+        sampleList.forEach(sample -> this.sampleKafkaProducer.send(
                 this.topic, sample.getId().toString(), sample));
 
         return ResponseEntity.status(HttpStatus.OK.value()).build();

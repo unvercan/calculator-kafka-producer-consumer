@@ -14,11 +14,11 @@
     </parent>
 
     <groupId>tr.unvercanunlu</groupId>
-    <artifactId>compare-match</artifactId>
+    <artifactId>sample</artifactId>
     <version>0.1</version>
 
-    <name>compare-match</name>
-    <description>compare-match</description>
+    <name>sample</name>
+    <description>Sample App</description>
 
     <properties>
         <java.version>17</java.version>
@@ -61,6 +61,10 @@
             <artifactId>lombok</artifactId>
             <optional>true</optional>
         </dependency>
+        <dependency>
+            <groupId>org.springframework.kafka</groupId>
+            <artifactId>spring-kafka</artifactId>
+        </dependency>
 
         <!--
         <dependency>
@@ -72,14 +76,11 @@
             <artifactId>kafka-streams</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.springframework.kafka</groupId>
-            <artifactId>spring-kafka</artifactId>
-        </dependency>
-        <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-quartz</artifactId>
         </dependency>
         -->
+
     </dependencies>
 
     <build>

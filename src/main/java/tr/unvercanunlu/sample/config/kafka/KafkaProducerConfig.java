@@ -21,7 +21,7 @@ public class KafkaProducerConfig {
     private String bootstrapServer;
 
     @Bean
-    public ProducerFactory<String, Sample> defaultCProducerConfig() {
+    public ProducerFactory<String, Sample> producerFactory() {
         Map<String, Object> configMap = new HashMap<>();
 
         configMap.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, this.bootstrapServer);
@@ -33,7 +33,7 @@ public class KafkaProducerConfig {
 
     @Bean
     public KafkaTemplate<String, Sample> kafkaTemplate() {
-        return new KafkaTemplate<>(defaultCProducerConfig());
+        return new KafkaTemplate<>(producerFactory());
     }
 
 }

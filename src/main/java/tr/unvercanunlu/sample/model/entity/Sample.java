@@ -3,6 +3,7 @@ package tr.unvercanunlu.sample.model.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.io.Serializable;
 import java.util.UUID;
 
 @Getter
@@ -12,7 +13,7 @@ import java.util.UUID;
 @AllArgsConstructor
 @Entity(name = "sample")
 @Table(name = "sample")
-public class Sample {
+public class Sample implements Serializable {
 
     @Id
     @GeneratedValue

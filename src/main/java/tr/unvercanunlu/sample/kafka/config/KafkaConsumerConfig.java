@@ -1,4 +1,4 @@
-package tr.unvercanunlu.sample.config.kafka;
+package tr.unvercanunlu.sample.kafka.config;
 
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.common.serialization.StringDeserializer;
@@ -10,6 +10,7 @@ import org.springframework.kafka.core.ConsumerFactory;
 import org.springframework.kafka.core.DefaultKafkaConsumerFactory;
 import org.springframework.kafka.support.serializer.JsonDeserializer;
 import tr.unvercanunlu.sample.model.entity.Sample;
+import tr.unvercanunlu.sample.model.entity.Sum;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -24,7 +25,7 @@ public class KafkaConsumerConfig {
     private String groupId;
 
     @Bean
-    public ConsumerFactory<String, Sample> consumerFactory() {
+    public ConsumerFactory<String, Sample> sampleConsumerFactory() {
         Map<String, Object> configMap = new HashMap<>();
 
         configMap.put(ConsumerConfig.GROUP_ID_CONFIG, this.groupId);
@@ -37,10 +38,31 @@ public class KafkaConsumerConfig {
         return new DefaultKafkaConsumerFactory<>(configMap);
     }
 
-    @Bean(name = "listenerFactory")
-    public ConcurrentKafkaListenerContainerFactory<String, Sample> listenerFactory() {
+    @Bean
+    public ConsumerFactory<String, Sum> sumConsumerFactory() {
+        Map<String, Object> configMap = new HashMap<>();
+
+        configMap.put(ConsumerConfig.GROUP_ID_CONFIG, this.groupId);
+        configMap.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, this.bootstrapServer);
+        configMap.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
+        configMap.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, "tr.unvercanunlu.sample.kafka.serialization.json.CustomSumJsonDeserializer");
+        configMap.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "earliest");
+        configMap.put(JsonDeserializer.TRUSTED_PACKAGES, "*");
+
+        return new DefaultKafkaConsumerFactory<>(configMap);
+    }
+
+    @Bean(name = "sampleListenerFactory")
+    public ConcurrentKafkaListenerContainerFactory<String, Sample> sampleListenerFactory() {
         ConcurrentKafkaListenerContainerFactory<String, Sample> factory = new ConcurrentKafkaListenerContainerFactory<>();
-        factory.setConsumerFactory(consumerFactory());
+        factory.setConsumerFactory(sampleConsumerFactory());
+        return factory;
+    }
+
+    @Bean(name = "sumListenerFactory")
+    public ConcurrentKafkaListenerContainerFactory<String, Sum> sumListenerFactory() {
+        ConcurrentKafkaListenerContainerFactory<String, Sum> factory = new ConcurrentKafkaListenerContainerFactory<>();
+        factory.setConsumerFactory(sumConsumerFactory());
         return factory;
     }
 

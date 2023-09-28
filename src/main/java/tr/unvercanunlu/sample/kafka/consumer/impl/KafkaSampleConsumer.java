@@ -10,23 +10,25 @@ import tr.unvercanunlu.sample.model.entity.Sample;
 import tr.unvercanunlu.sample.model.entity.Sum;
 import tr.unvercanunlu.sample.repository.ISumRepository;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 @Component
 @RequiredArgsConstructor
-public class KafkaConsumer implements IKafkaConsumer<String, Sample> {
+public class KafkaSampleConsumer implements IKafkaConsumer<String, Sample> {
+
+    private final Logger logger = Logger.getLogger(this.getClass().getName());
 
     private final ISumRepository sumRepository;
 
     @SneakyThrows
     @Override
-    @KafkaListener(topics = "${spring.kafka.topic}", containerFactory = "listenerFactory", groupId = "${spring.kafka.group-id}")
+    @KafkaListener(topics = "${spring.kafka.topic.sample}", containerFactory = "sampleListenerFactory", groupId = "${spring.kafka.group-id}")
     public void receive(ConsumerRecord<String, Sample> payload) {
         String key = payload.key();
         Sample value = payload.value();
 
-        System.out.println("Sample is received. " +
-                "Key: " + key + ". " +
-                "Value: " + "Sample{first=" + value.getFirst() + " , second=" + value.getSecond() + "}"
-        );
+        this.logger.log(Level.INFO, () -> String.format("Sample is received. Key: %s, Value: %s", key, value));
 
         Sum sum = Sum.builder()
                 .id(value.getId())
@@ -34,6 +36,8 @@ public class KafkaConsumer implements IKafkaConsumer<String, Sample> {
                 .build();
 
         this.sumRepository.save(sum);
+
+        this.logger.log(Level.INFO, () -> String.format("Sum is created. Sum: %s", sum));
     }
 
 }

@@ -1,5 +1,9 @@
-package tr.unvercanunlu.sample.config;
+package tr.unvercanunlu.sample.controller;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
+
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class ApiConfig {
 
     public static final String VERSION = "v1";

@@ -20,6 +20,7 @@
     <name>sample</name>
     <description>Sample App</description>
 
+    <!-- Properties -->
     <properties>
         <java.version>17</java.version>
         <java.version>17</java.version>
@@ -54,14 +55,14 @@
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
 
-        <!-- API Documentation -->
+        <!-- API Documentation (OpenApi) -->
         <dependency>
             <groupId>org.springdoc</groupId>
             <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
             <version>2.1.0</version>
         </dependency>
 
-        <!-- SQL (H2) Database -->
+        <!-- SQL Database (H2) -->
         <dependency>
             <groupId>com.h2database</groupId>
             <artifactId>h2</artifactId>
@@ -75,20 +76,26 @@
             <optional>true</optional>
         </dependency>
 
-        <!-- Kafka -->
+        <!-- Message Broker (Kafka) -->
         <dependency>
             <groupId>org.springframework.kafka</groupId>
             <artifactId>spring-kafka</artifactId>
         </dependency>
 
-        <!-- NoSQL (Mongo) Database -->
+        <!-- NoSQL Database (Mongo) -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-mongodb</artifactId>
         </dependency>
 
-        <!-- To be added
+        <!-- Serialization (JSON) -->
+        <dependency>
+            <groupId>org.json</groupId>
+            <artifactId>json</artifactId>
+            <version>20230618</version>
+        </dependency>
 
+        <!-- To be added
         <dependency>
             <groupId>org.apache.kafka</groupId>
             <artifactId>kafka-streams</artifactId>
@@ -98,7 +105,6 @@
             <artifactId>spring-boot-starter-quartz</artifactId>
         </dependency>
         -->
-
     </dependencies>
 
     <build>

@@ -25,7 +25,7 @@ public class KafkaSampleProducer implements IKafkaProducer<String, Sample> {
     public void send(String key, Sample value) {
         this.sampleKafkaTemplate.send(this.sampleTopic, key, value);
 
-        this.logger.log(Level.INFO, () -> String.format("Sample is sent. Key: %s, Value: %s", key, value));
+        this.logger.log(Level.INFO, () -> String.format("Sample is sent to '%s' topic. Key: %s, Value: %s", this.sampleTopic, key, value));
     }
 
 }

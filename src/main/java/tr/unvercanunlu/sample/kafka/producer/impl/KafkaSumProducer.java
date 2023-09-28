@@ -25,7 +25,7 @@ public class KafkaSumProducer implements IKafkaProducer<String, Sum> {
     public void send(String key, Sum value) {
         this.sumKafkaTemplate.send(this.sumTopic, key, value);
 
-        this.logger.log(Level.INFO, () -> String.format("Sum is received. Key: %s, Value: %s", key, value));
+        this.logger.log(Level.INFO, () -> String.format("Sum is sent to '%s' topic. Key: %s, Value: %s", this.sumTopic, key, value));
     }
 
 }

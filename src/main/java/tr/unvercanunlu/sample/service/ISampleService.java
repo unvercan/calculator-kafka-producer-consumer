@@ -23,11 +23,9 @@ public interface ISampleService {
     List<Sample> randomize(
             @Positive(message = "Count should be positive integer.")
             @NotNull(message = "Count should not be null.")
-            @NotBlank(message = "Count should not be empty.")
             @Min(value = 1, message = "Count should be at least one.")
-            @Max(value = 1000, message = "Count should be at max one thousand.")
-            @Digits(integer = 4, fraction = 0, message = "Count should be integer and at max one thousand.")
-            Integer count
-    );
+            @Max(value = 1000, message = "Count should be at most one thousand.")
+            @Digits(integer = 4, fraction = 0, message = "Count should be integer and at most one thousand.")
+            Integer count);
 
 }

@@ -56,25 +56,32 @@ public class SampleService implements ISampleService {
                 .second(request.getSecond())
                 .build();
 
+        this.logger.log(Level.INFO, String.format("Sample is created. %s", sample));
+
         sample = this.sampleRepository.save(sample);
 
-        this.logger.log(Level.INFO, String.format("Sample is created. Sample: %s", sample));
+        this.logger.log(Level.INFO, String.format("Sample is saved to SQL database. %s", sample));
 
-        return this.sampleRepository.save(sample);
+        return sample;
     }
 
     @Override
     public List<Sample> randomize(Integer count) {
         List<Sample> sampleList = IntStream.range(0, count)
-                .mapToObj(i -> Sample.builder()
-                        .first(this.randomService.generate(1, 10))
-                        .second(this.randomService.generate(1, 10))
-                        .build())
-                .toList();
+                .mapToObj(i -> {
+                    Sample sample = Sample.builder()
+                            .first(this.randomService.generate(1, 10))
+                            .second(this.randomService.generate(1, 10))
+                            .build();
+
+                    this.logger.log(Level.INFO, String.format("Sample is created. %s", sample));
+
+                    return sample;
+                }).toList();
 
         sampleList = sampleList.stream().map(this.sampleRepository::save).toList();
 
-        sampleList.forEach(sample -> this.logger.log(Level.INFO, String.format("Sample is created. Sample: %s", sample)));
+        sampleList.forEach(sample -> this.logger.log(Level.INFO, String.format("Sample is saved to SQL Database. %s", sample)));
 
         return sampleList;
     }

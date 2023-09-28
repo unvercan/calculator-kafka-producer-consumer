@@ -3,6 +3,7 @@ package tr.unvercanunlu.sample.kafka.consumer.impl;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Component;
 import tr.unvercanunlu.sample.kafka.consumer.IKafkaConsumer;
@@ -17,6 +18,9 @@ public class KafkaSumConsumer implements IKafkaConsumer<String, Sum> {
 
     private final Logger logger = Logger.getLogger(this.getClass().getName());
 
+    @Value(value = "${spring.kafka.topic.sum}")
+    private String sumTopic;
+
     @SneakyThrows
     @Override
     @KafkaListener(topics = "${spring.kafka.topic.sum}", containerFactory = "sumListenerFactory", groupId = "${spring.kafka.group-id}")
@@ -24,7 +28,7 @@ public class KafkaSumConsumer implements IKafkaConsumer<String, Sum> {
         String key = payload.key();
         Sum value = payload.value();
 
-        this.logger.log(Level.INFO, () -> String.format("Sum is received. Key: %s, Value: %s", key, value));
+        this.logger.log(Level.INFO, () -> String.format("Sum is received from '%s' topic. Key: %s, Value: %s", this.sumTopic, key, value));
     }
 
 }

@@ -30,7 +30,9 @@ spring:
   # Kafka
   kafka:
     bootstrap-servers: localhost:9092
-    topic: sample
+    topic:
+      sample: sample
+      sum: sum
     group-id: sample-group
 
   # NoSQL Datasource

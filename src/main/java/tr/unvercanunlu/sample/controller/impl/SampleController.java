@@ -1,42 +1,28 @@
 package tr.unvercanunlu.sample.controller.impl;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import tr.unvercanunlu.sample.config.ApiConfig;
+import tr.unvercanunlu.sample.controller.ApiConfig;
 import tr.unvercanunlu.sample.controller.ISampleController;
 import tr.unvercanunlu.sample.kafka.producer.IKafkaProducer;
 import tr.unvercanunlu.sample.model.entity.Sample;
 import tr.unvercanunlu.sample.model.request.SampleRequest;
-import tr.unvercanunlu.sample.repository.ISampleRepository;
 import tr.unvercanunlu.sample.service.ISampleService;
 
 import java.util.List;
-import java.util.Random;
 import java.util.UUID;
-import java.util.function.Supplier;
-import java.util.stream.IntStream;
 
 @RestController
 @RequiredArgsConstructor
 @RequestMapping(path = ApiConfig.SAMPLE_API)
 public class SampleController implements ISampleController {
 
-    private static final Random random = new Random();
-
-    private static final Supplier<Integer> randomGenerator = () -> 1 + random.nextInt(10);
-
     private final IKafkaProducer<String, Sample> sampleKafkaProducer;
 
     private final ISampleService sampleService;
-
-    private final ISampleRepository sampleRepository;
-
-    @Value(value = "${spring.kafka.topic}")
-    private String topic;
 
     @Override
     @RequestMapping(method = RequestMethod.GET)
@@ -69,12 +55,7 @@ public class SampleController implements ISampleController {
     @Override
     @RequestMapping(method = RequestMethod.POST)
     public ResponseEntity<Sample> add(@RequestBody SampleRequest request) {
-        Sample sample = Sample.builder()
-                .first(request.getFirst())
-                .second(request.getSecond())
-                .build();
-
-        sample = this.sampleRepository.save(sample);
+        Sample sample = this.sampleService.add(request);
 
         return ResponseEntity.status(HttpStatus.OK.value())
                 .contentType(MediaType.APPLICATION_JSON)
@@ -83,10 +64,8 @@ public class SampleController implements ISampleController {
 
     @Override
     @RequestMapping(path = "/random", method = RequestMethod.POST)
-    public ResponseEntity<List<Sample>> randomize(
-            @RequestParam(name = "count", required = false, defaultValue = "1") String countText
-    ) {
-        Integer count;
+    public ResponseEntity<List<Sample>> randomize(@RequestParam(name = "count", required = false, defaultValue = "1") String countText) {
+        int count;
 
         try {
             count = Integer.parseInt(countText);
@@ -98,14 +77,7 @@ public class SampleController implements ISampleController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST.value()).build();
         }
 
-        List<Sample> sampleList = IntStream.range(0, count)
-                .mapToObj(i -> Sample.builder()
-                        .first(randomGenerator.get())
-                        .second(randomGenerator.get())
-                        .build()
-                ).toList();
-
-        sampleList = sampleRepository.saveAll(sampleList);
+        List<Sample> sampleList = this.sampleService.randomize(count);
 
         return ResponseEntity.status(HttpStatus.OK.value())
                 .contentType(MediaType.APPLICATION_JSON)
@@ -115,10 +87,9 @@ public class SampleController implements ISampleController {
     @Override
     @RequestMapping(path = "/populate", method = RequestMethod.POST)
     public ResponseEntity<Void> populate() {
-        List<Sample> sampleList = this.sampleRepository.findAll();
+        List<Sample> sampleList = this.sampleService.getAll();
 
-        sampleList.forEach(sample -> this.sampleKafkaProducer.send(
-                this.topic, sample.getId().toString(), sample));
+        sampleList.forEach(sample -> this.sampleKafkaProducer.send(sample.getId().toString(), sample));
 
         return ResponseEntity.status(HttpStatus.OK.value()).build();
     }

@@ -15,13 +15,9 @@ public interface ISampleController {
 
     ResponseEntity<List<Sample>> getAll();
 
-    ResponseEntity<Sample> get(
-            @NotNull(message = "Id should not be null.") UUID id
-    );
+    ResponseEntity<Sample> get(@NotNull(message = "Id should not be null.") UUID id);
 
-    ResponseEntity<Void> delete(
-            @NotNull(message = "Id should not be null.") UUID id
-    );
+    ResponseEntity<Void> delete(@NotNull(message = "Id should not be null.") UUID id);
 
     ResponseEntity<Sample> add(
             @Valid

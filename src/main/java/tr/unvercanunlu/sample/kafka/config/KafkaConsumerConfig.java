@@ -45,7 +45,7 @@ public class KafkaConsumerConfig {
         configMap.put(ConsumerConfig.GROUP_ID_CONFIG, this.groupId);
         configMap.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, this.bootstrapServer);
         configMap.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
-        configMap.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, "tr.unvercanunlu.sample.kafka.serialization.json.CustomSumJsonDeserializer");
+        configMap.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, "tr.unvercanunlu.sample.kafka.json.CustomSumJsonDeserializer");
         configMap.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "earliest");
         configMap.put(JsonDeserializer.TRUSTED_PACKAGES, "*");
 

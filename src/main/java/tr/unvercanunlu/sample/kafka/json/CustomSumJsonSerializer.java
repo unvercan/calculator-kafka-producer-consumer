@@ -1,4 +1,4 @@
-package tr.unvercanunlu.sample.kafka.serialization.json;
+package tr.unvercanunlu.sample.kafka.json;
 
 import org.apache.kafka.common.serialization.Serializer;
 import org.json.JSONObject;

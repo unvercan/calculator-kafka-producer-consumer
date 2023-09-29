@@ -14,11 +14,11 @@
     </parent>
 
     <groupId>tr.unvercanunlu</groupId>
-    <artifactId>sample</artifactId>
+    <artifactId>async-calculator</artifactId>
     <version>0.1</version>
 
-    <name>sample</name>
-    <description>Sample App</description>
+    <name>async-calculator</name>
+    <description>Async Calculator App</description>
 
     <!-- Properties -->
     <properties>

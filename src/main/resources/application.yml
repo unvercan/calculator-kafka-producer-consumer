@@ -31,16 +31,17 @@ spring:
   kafka:
     bootstrap-servers: localhost:9092
     topic:
-      sample: sample
-      sum: sum
-    group-id: sample-group
+      operand: operand
+      operation: operation
+      result: result
+    group-id: calculator-group
 
   # NoSQL Database (MongoDB)
   data:
     mongodb:
       host: localhost
       port: 27017
-      database: sum-db
+      database: result-db
 
 # API Documentation (OpenAPI)
 springdoc:

@@ -15,8 +15,6 @@ public interface IResultController {
 
     ResponseEntity<Result> get(@NotNull(message = "Id should not be null.") UUID id);
 
-    ResponseEntity<Void> delete(@NotNull(message = "Id should not be null.") UUID id);
-
     ResponseEntity<Void> populate();
 
 }

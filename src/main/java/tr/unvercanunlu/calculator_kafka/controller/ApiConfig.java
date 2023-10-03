@@ -16,4 +16,6 @@ public class ApiConfig {
 
     public static final String RESULT_API = BASE + "/" + "result";
 
+    public static final String CALCULATION_API = BASE + "/" + "calculation";
+
 }

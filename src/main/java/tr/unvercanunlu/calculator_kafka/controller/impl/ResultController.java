@@ -47,14 +47,6 @@ public class ResultController implements IResultController {
     }
 
     @Override
-    @RequestMapping(path = "/{id}", method = RequestMethod.DELETE)
-    public ResponseEntity<Void> delete(@PathVariable(name = "id") UUID id) {
-        this.resultService.delete(id);
-
-        return ResponseEntity.status(HttpStatus.OK.value()).build();
-    }
-
-    @Override
     @RequestMapping(path = "/populate", method = RequestMethod.POST)
     public ResponseEntity<Void> populate() {
         List<Result> resultList = this.resultService.getAll();

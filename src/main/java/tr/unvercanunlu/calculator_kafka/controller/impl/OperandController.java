@@ -4,12 +4,14 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
 import tr.unvercanunlu.calculator_kafka.controller.ApiConfig;
 import tr.unvercanunlu.calculator_kafka.controller.IOperandController;
 import tr.unvercanunlu.calculator_kafka.kafka.producer.IKafkaProducer;
 import tr.unvercanunlu.calculator_kafka.model.entity.Operand;
-import tr.unvercanunlu.calculator_kafka.model.request.OperandRequest;
 import tr.unvercanunlu.calculator_kafka.service.IOperandService;
 
 import java.util.List;
@@ -42,46 +44,6 @@ public class OperandController implements IOperandController {
         return ResponseEntity.status(HttpStatus.OK.value())
                 .contentType(MediaType.APPLICATION_JSON)
                 .body(operand);
-    }
-
-    @Override
-    @RequestMapping(path = "/{id}", method = RequestMethod.DELETE)
-    public ResponseEntity<Void> delete(@PathVariable(name = "id") UUID id) {
-        this.operandService.delete(id);
-
-        return ResponseEntity.status(HttpStatus.OK.value()).build();
-    }
-
-    @Override
-    @RequestMapping(method = RequestMethod.POST)
-    public ResponseEntity<Operand> add(@RequestBody OperandRequest request) {
-        Operand operand = this.operandService.add(request);
-
-        return ResponseEntity.status(HttpStatus.OK.value())
-                .contentType(MediaType.APPLICATION_JSON)
-                .body(operand);
-    }
-
-    @Override
-    @RequestMapping(path = "/random", method = RequestMethod.POST)
-    public ResponseEntity<List<Operand>> randomize(@RequestParam(name = "count", required = false, defaultValue = "1") String countText) {
-        int count;
-
-        try {
-            count = Integer.parseInt(countText);
-        } catch (NumberFormatException e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST.value()).build();
-        }
-
-        if (count <= 0) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST.value()).build();
-        }
-
-        List<Operand> operandList = this.operandService.randomize(count);
-
-        return ResponseEntity.status(HttpStatus.OK.value())
-                .contentType(MediaType.APPLICATION_JSON)
-                .body(operandList);
     }
 
     @Override

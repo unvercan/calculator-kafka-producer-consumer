@@ -1,18 +1,17 @@
 package tr.unvercanunlu.calculator_kafka.model.request;
 
 import jakarta.validation.constraints.*;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 
 import java.io.Serializable;
 
+@ToString
 @Getter
 @Setter
 @Builder
-@ToString
-public class OperandRequest implements Serializable {
+@NoArgsConstructor
+@AllArgsConstructor
+public class CalculationRequest implements Serializable {
 
     @Positive(message = "First operand should be positive integer.")
     @Digits(integer = 2, fraction = 0, message = "First operand should be integer.")
@@ -27,5 +26,12 @@ public class OperandRequest implements Serializable {
     @Min(value = 1, message = "Second operand should be at least one.")
     @Max(value = 10, message = "Second operand should be at most ten.")
     private Integer second;
+
+    @Positive(message = "Operation code should be positive integer.")
+    @NotNull(message = "Operation code should not be null.")
+    @Min(value = 0, message = "Operation code should be at least zero.")
+    @Max(value = 7, message = "Operation code should be at most seven.")
+    @Digits(integer = 1, fraction = 0, message = "Operation code should be integer and has at most one digit.")
+    private Integer operationCode;
 
 }

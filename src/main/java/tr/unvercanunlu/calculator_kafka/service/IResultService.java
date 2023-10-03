@@ -1,5 +1,6 @@
 package tr.unvercanunlu.calculator_kafka.service;
 
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import org.springframework.validation.annotation.Validated;
 import tr.unvercanunlu.calculator_kafka.model.entity.Result;
@@ -14,6 +15,9 @@ public interface IResultService {
 
     Result get(@NotNull(message = "Id should not be null.") UUID id);
 
-    void delete(@NotNull(message = "Id should not be null.") UUID id);
+    Result create(
+            @NotNull(message = "Result should not be null.")
+            @Valid
+            Result result);
 
 }

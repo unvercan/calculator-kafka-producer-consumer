@@ -17,10 +17,10 @@ public class RandomService implements IRandomService {
     private final Random random = new Random();
 
     @Override
-    public Integer generate(Integer startGap, Integer endGap) {
-        Integer randomValue = startGap + random.nextInt(endGap);
+    public Integer generate(Integer gapStart, Integer gapEnd) {
+        Integer randomValue = gapStart + random.nextInt(gapEnd);
 
-        this.logger.log(Level.INFO, () -> String.format("Random value between [%d, %d] gap is created. Value: %d", startGap, endGap, randomValue));
+        this.logger.log(Level.INFO, () -> String.format("Random value between [%d, %d] gap is created. Value: %d", gapStart, gapEnd, randomValue));
 
         return randomValue;
     }

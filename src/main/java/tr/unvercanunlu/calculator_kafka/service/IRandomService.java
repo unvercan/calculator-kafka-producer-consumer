@@ -12,10 +12,10 @@ public interface IRandomService {
             @Positive(message = "Start of gap should be positive integer.")
             @NotNull(message = "Start of gap should not be null.")
             @Min(value = 0, message = "Start of gap should be at least zero.")
-            Integer startGap,
+            Integer gapStart,
             @Positive(message = "End of gap should be positive integer.")
             @NotNull(message = "End of gap should not be null.")
             @Min(value = 1, message = "End of gap should be at least one.")
-            Integer endGap);
+            Integer gapEnd);
 
 }

@@ -33,11 +33,8 @@ public class ResultService implements IResultService {
     }
 
     @Override
-    public void delete(UUID id) {
-        this.resultRepository.findById(id)
-                .orElseThrow(() -> new HttpClientErrorException(HttpStatus.NOT_FOUND));
-
-        this.resultRepository.deleteById(id);
+    public Result create(Result result) {
+        return this.resultRepository.save(result);
     }
 
 }

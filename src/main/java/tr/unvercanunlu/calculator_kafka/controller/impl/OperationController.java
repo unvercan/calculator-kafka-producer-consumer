@@ -20,16 +20,16 @@ import java.util.List;
 @RequestMapping(path = ApiConfig.OPERATION_API)
 public class OperationController implements IOperationController {
 
-    private IOperationService operationService;
+    private final IOperationService operationService;
 
     @Override
     @RequestMapping(method = RequestMethod.GET)
     public ResponseEntity<List<Operation>> getAll() {
-        List<Operation> operationList = this.operationService.getAll();
+        List<Operation> operations = this.operationService.getAll();
 
         return ResponseEntity.status(HttpStatus.OK.value())
                 .contentType(MediaType.APPLICATION_JSON)
-                .body(operationList);
+                .body(operations);
     }
 
     @Override

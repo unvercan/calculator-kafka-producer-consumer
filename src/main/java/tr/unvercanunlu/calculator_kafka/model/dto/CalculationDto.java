@@ -2,6 +2,7 @@ package tr.unvercanunlu.calculator_kafka.model.dto;
 
 import lombok.*;
 
+import java.io.Serializable;
 import java.util.UUID;
 
 @ToString
@@ -10,7 +11,7 @@ import java.util.UUID;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class CalculationDto {
+public class CalculationDto implements Serializable {
 
     private UUID id;
 

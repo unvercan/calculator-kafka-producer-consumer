@@ -6,6 +6,8 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import lombok.*;
 
+import java.io.Serializable;
+
 @ToString
 @Getter
 @Setter
@@ -14,7 +16,7 @@ import lombok.*;
 @AllArgsConstructor
 @Entity(name = "operation")
 @Table(name = "operation")
-public class Operation {
+public class Operation implements Serializable {
 
     @Id
     @Column(name = "code", updatable = false, nullable = false, unique = true)

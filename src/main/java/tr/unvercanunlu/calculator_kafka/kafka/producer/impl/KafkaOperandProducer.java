@@ -4,28 +4,36 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Component;
+import tr.unvercanunlu.calculator_kafka.kafka.message.OperandMessage;
 import tr.unvercanunlu.calculator_kafka.kafka.producer.IKafkaProducer;
 import tr.unvercanunlu.calculator_kafka.model.entity.Operand;
 
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.util.UUID;
 
 @Component
 @RequiredArgsConstructor
-public class KafkaOperandProducer implements IKafkaProducer<String, Operand> {
+public class KafkaOperandProducer implements IKafkaProducer<UUID, Operand> {
 
-    private final Logger logger = Logger.getLogger(this.getClass().getName());
-
-    private final KafkaTemplate<String, Operand> operandKafkaTemplate;
+    private final KafkaTemplate<String, OperandMessage> operandMessageKafkaTemplate;
 
     @Value(value = "${spring.kafka.topic.operand}")
     private String operandTopic;
 
     @Override
-    public void send(String key, Operand value) {
-        this.operandKafkaTemplate.send(this.operandTopic, key, value);
+    public void send(UUID calculationId, Operand operand) {
+        OperandMessage message = OperandMessage.builder()
+                .calculationId(calculationId)
+                .operandId(operand.getId())
+                .first(operand.getFirst())
+                .second(operand.getSecond())
+                .build();
 
-        this.logger.log(Level.INFO, () -> String.format("Operand is sent to '%s' topic. Key: %s, Value: %s", this.operandTopic, key, value));
+        System.out.println(message + " is created.");
+
+        this.operandMessageKafkaTemplate.send(this.operandTopic, calculationId.toString(), message);
+
+        System.out.println(message + " is sent to Kafka.");
+
     }
 
 }

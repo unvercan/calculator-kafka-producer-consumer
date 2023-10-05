@@ -9,7 +9,6 @@ import tr.unvercanunlu.calculator_kafka.repository.IOperandRepository;
 import tr.unvercanunlu.calculator_kafka.service.IOperandService;
 
 import java.util.List;
-import java.util.Objects;
 import java.util.UUID;
 
 @Service
@@ -20,10 +19,7 @@ public class OperandService implements IOperandService {
 
     @Override
     public List<Operand> getAll() {
-        return this.operandRepository.findAll()
-                .stream()
-                .filter(Objects::nonNull)
-                .toList();
+        return this.operandRepository.findAll();
     }
 
     @Override

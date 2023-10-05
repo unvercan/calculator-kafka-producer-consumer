@@ -12,8 +12,8 @@ import java.util.UUID;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Entity(name = "operation")
-@Table(name = "operation")
+@Entity(name = "result")
+@Table(name = "result")
 public class Result implements Serializable {
 
     @Id

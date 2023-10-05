@@ -16,7 +16,7 @@ public interface IOperandService {
     Operand get(@NotNull(message = "Id should not be null.") UUID id);
 
     Operand create(
-            @NotNull(message = "Operand request should not be null.")
+            @NotNull(message = "Operand should not be null.")
             @Valid
             Operand operand);
 

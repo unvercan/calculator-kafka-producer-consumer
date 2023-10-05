@@ -9,7 +9,6 @@ import tr.unvercanunlu.calculator_kafka.repository.IResultRepository;
 import tr.unvercanunlu.calculator_kafka.service.IResultService;
 
 import java.util.List;
-import java.util.Objects;
 import java.util.UUID;
 
 @Service
@@ -20,10 +19,7 @@ public class ResultService implements IResultService {
 
     @Override
     public List<Result> getAll() {
-        return this.resultRepository.findAll()
-                .stream()
-                .filter(Objects::nonNull)
-                .toList();
+        return this.resultRepository.findAll();
     }
 
     @Override

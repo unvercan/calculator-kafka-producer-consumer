@@ -10,11 +10,7 @@ public class ApiConfig {
 
     public static final String BASE = "/" + "api" + "/" + VERSION;
 
-    public static final String OPERAND_API = BASE + "/" + "operand";
-
     public static final String OPERATION_API = BASE + "/" + "operation";
-
-    public static final String RESULT_API = BASE + "/" + "result";
 
     public static final String CALCULATION_API = BASE + "/" + "calculation";
 

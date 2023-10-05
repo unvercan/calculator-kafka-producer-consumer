@@ -27,7 +27,6 @@ public class CalculationRequest implements Serializable {
     @Max(value = 10, message = "Second operand should be at most ten.")
     private Integer second;
 
-    @Positive(message = "Operation code should be positive integer.")
     @NotNull(message = "Operation code should not be null.")
     @Min(value = 0, message = "Operation code should be at least zero.")
     @Max(value = 7, message = "Operation code should be at most seven.")

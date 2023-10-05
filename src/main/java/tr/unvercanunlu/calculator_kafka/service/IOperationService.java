@@ -1,6 +1,9 @@
 package tr.unvercanunlu.calculator_kafka.service;
 
-import jakarta.validation.constraints.*;
+import jakarta.validation.constraints.Digits;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotNull;
 import org.springframework.validation.annotation.Validated;
 import tr.unvercanunlu.calculator_kafka.model.entity.Operation;
 
@@ -12,7 +15,6 @@ public interface IOperationService {
     List<Operation> getAll();
 
     Operation get(
-            @Positive(message = "Code should be positive integer.")
             @NotNull(message = "Code should not be null.")
             @Min(value = 0, message = "Code should be at least zero.")
             @Max(value = 7, message = "Code should be at most seven.")

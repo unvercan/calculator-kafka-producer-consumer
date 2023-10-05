@@ -20,7 +20,7 @@ INSERT INTO "operation" ("code", "name")
 VALUES (6, 'average');
 
 INSERT INTO "operation" ("code", "name")
-VALUES (7, 'max');
+VALUES (7, 'maximum');
 
 INSERT INTO "operation" ("code", "name")
-VALUES (8, 'min');
+VALUES (8, 'minimum');

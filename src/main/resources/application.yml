@@ -32,16 +32,7 @@ spring:
     bootstrap-servers: localhost:9092
     group-id: calculator-group
     topic:
-      operand: operand
-      operation: operation
-      result: result
-
-  # NoSQL Database (MongoDB)
-  # data:
-  # mongodb:
-  # host: localhost
-  # port: 27017
-  # database: result-db
+      calculation: calculation
 
   # Database Initializing
   sql:

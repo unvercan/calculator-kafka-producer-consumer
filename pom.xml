@@ -14,11 +14,11 @@
     </parent>
 
     <groupId>tr.unvercanunlu</groupId>
-    <artifactId>calculator-kafka</artifactId>
+    <artifactId>calculator-kafka-prod-cons</artifactId>
     <version>0.1</version>
 
-    <name>calculator-kafka</name>
-    <description>Calculator with Apache Kafka App</description>
+    <name>calculator-kafka-pub-sub</name>
+    <description>Calculator with Apache Kafka Producer-Consumer App</description>
 
     <!-- Properties -->
     <properties>
@@ -81,34 +81,6 @@
             <groupId>org.springframework.kafka</groupId>
             <artifactId>spring-kafka</artifactId>
         </dependency>
-
-        <!-- Serialization (JSON) -->
-        <dependency>
-            <groupId>org.json</groupId>
-            <artifactId>json</artifactId>
-            <version>20230618</version>
-        </dependency>
-
-        <!-- Kafka Stream -->
-        <dependency>
-            <groupId>org.apache.kafka</groupId>
-            <artifactId>kafka-streams</artifactId>
-        </dependency>
-
-        <!-- To be added
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-data-mongodb</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-data-jpa</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-quartz</artifactId>
-        </dependency>
-        -->
     </dependencies>
 
     <build>

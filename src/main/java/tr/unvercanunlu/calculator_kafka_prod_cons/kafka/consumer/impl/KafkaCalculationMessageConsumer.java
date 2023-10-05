@@ -42,24 +42,18 @@ public class KafkaCalculationMessageConsumer implements IKafkaConsumer<String, C
 
         System.out.println(calculation + " is fetched from database.");
 
-        Double result;
-
-        try {
-            result = switch (value.getOperationCode()) {
-                case 0 -> (double) value.getFirst() + value.getSecond();
-                case 1 -> (double) value.getFirst() - value.getSecond();
-                case 2 -> (double) value.getFirst() * value.getSecond();
-                case 3 -> (double) value.getFirst() / value.getSecond();
-                case 4 -> (double) value.getFirst() % value.getSecond();
-                case 5 -> Math.pow(value.getFirst(), value.getSecond());
-                case 6 -> (double) (value.getFirst() + value.getSecond()) / 2;
-                case 7 -> (double) Math.max(value.getFirst(), value.getSecond());
-                case 8 -> (double) Math.min(value.getFirst(), value.getSecond());
-                default -> null;
-            };
-        } catch (Exception e) {
-            throw new RuntimeException("Error happens when calculation.");
-        }
+        Double result = switch (value.getOperationCode()) {
+            case 0 -> (double) value.getFirst() + value.getSecond();
+            case 1 -> (double) value.getFirst() - value.getSecond();
+            case 2 -> (double) value.getFirst() * value.getSecond();
+            case 3 -> (double) value.getFirst() / value.getSecond();
+            case 4 -> (double) value.getFirst() % value.getSecond();
+            case 5 -> Math.pow(value.getFirst(), value.getSecond());
+            case 6 -> (double) (value.getFirst() + value.getSecond()) / 2;
+            case 7 -> (double) Math.max(value.getFirst(), value.getSecond());
+            case 8 -> (double) Math.min(value.getFirst(), value.getSecond());
+            default -> null;
+        };
 
         calculation.setResult(result);
 

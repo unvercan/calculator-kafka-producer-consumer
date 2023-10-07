@@ -1,6 +1,6 @@
-# Core
+# Server
 server:
-  port: 3500
+  port: 3535
 
 spring:
   # SQL Database (H2)
@@ -41,6 +41,13 @@ spring:
       platform: h2
       schema-locations: classpath:sql/schema.sql
       data-locations: classpath:sql/data.sql
+
+# Logging
+logging:
+  level:
+    root: info
+    tr.unvercanunlu.calculator_kafka_prod_cons.kafka: debug
+    tr.unvercanunlu.calculator_kafka_prod_cons.controller: trace
 
 # API Documentation (OpenAPI)
 springdoc:

@@ -1,6 +1,8 @@
 package tr.unvercanunlu.calculator_kafka_prod_cons.kafka.producer.impl;
 
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Component;
@@ -14,6 +16,8 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class KafkaCalculationProducer implements IKafkaProducer<UUID, Calculation> {
 
+    private final Logger logger = LoggerFactory.getLogger(KafkaCalculationProducer.class);
+
     private final KafkaTemplate<String, CalculationMessage> calculationMessageKafkaTemplate;
 
     @Value(value = "${spring.kafka.topic.calculation}")
@@ -21,17 +25,22 @@ public class KafkaCalculationProducer implements IKafkaProducer<UUID, Calculatio
 
     @Override
     public void send(UUID key, Calculation value) {
+        this.logger.info("Kafka producer is started.");
+
         CalculationMessage message = CalculationMessage.builder()
                 .first(value.getFirst())
                 .second(value.getSecond())
                 .operationCode(value.getOperationCode())
                 .build();
 
-        System.out.println(message + " is created.");
+        this.logger.info("Calculation message is created.");
+
+        this.logger.debug("Created calculation message: " + message);
 
         this.calculationMessageKafkaTemplate.send(this.calculationTopic, key.toString(), message);
 
-        System.out.println(message + " is sent to Kafka.");
+        this.logger.info("Kafka producer sent calculation message with " + key + " key as a record to " + this.calculationTopic + " topic.");
 
+        this.logger.info("Kafka producer is end.");
     }
 }

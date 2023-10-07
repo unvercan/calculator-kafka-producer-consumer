@@ -1,6 +1,8 @@
 package tr.unvercanunlu.calculator_kafka_prod_cons.controller.impl;
 
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -14,12 +16,15 @@ import tr.unvercanunlu.calculator_kafka_prod_cons.model.request.CalculationReque
 import tr.unvercanunlu.calculator_kafka_prod_cons.repository.ICalculationRepository;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @RestController
 @RequiredArgsConstructor
 @RequestMapping(path = ApiConfig.CALCULATION_API)
 public class CalculationController implements ICalculationController {
+
+    private final Logger logger = LoggerFactory.getLogger(CalculationController.class);
 
     private final ICalculationRepository calculationRepository;
 
@@ -28,7 +33,13 @@ public class CalculationController implements ICalculationController {
     @Override
     @RequestMapping(method = RequestMethod.GET)
     public ResponseEntity<List<Calculation>> getAll() {
+        this.logger.info("Get all calculations request is received.");
+
         List<Calculation> calculations = this.calculationRepository.findAll();
+
+        this.logger.debug("All calculations: " + calculations);
+
+        this.logger.info("All calculations are fetched from the database.");
 
         return ResponseEntity.status(HttpStatus.OK.value())
                 .contentType(MediaType.APPLICATION_JSON)
@@ -38,8 +49,21 @@ public class CalculationController implements ICalculationController {
     @Override
     @RequestMapping(path = "/{id}", method = RequestMethod.GET)
     public ResponseEntity<Calculation> get(@PathVariable(name = "id") UUID id) {
-        Calculation calculation = this.calculationRepository.findById(id)
-                .orElseThrow(() -> new HttpClientErrorException(HttpStatus.NOT_FOUND));
+        this.logger.info("Get calculation with " + id + " id request is received.");
+
+        Optional<Calculation> optionalCalculation = this.calculationRepository.findById(id);
+
+        if (optionalCalculation.isEmpty()) {
+            this.logger.info("Calculation with " + id + " id is not found in the database.");
+
+            throw new HttpClientErrorException(HttpStatus.NOT_FOUND);
+        }
+
+        this.logger.info("Calculation with " + id + " id is fetched from the database.");
+
+        Calculation calculation = optionalCalculation.get();
+
+        this.logger.debug("Fetched calculation: " + calculation);
 
         return ResponseEntity.status(HttpStatus.OK.value())
                 .contentType(MediaType.APPLICATION_JSON)
@@ -49,7 +73,9 @@ public class CalculationController implements ICalculationController {
     @Override
     @RequestMapping(method = RequestMethod.POST)
     public ResponseEntity<Void> create(@RequestBody CalculationRequest request) {
-        System.out.println(request + " is received as request.");
+        this.logger.info("Create calculation request is received.");
+
+        this.logger.debug("Calculation request: " + request);
 
         Calculation calculation = Calculation.builder()
                 .first(request.getFirst())
@@ -57,15 +83,21 @@ public class CalculationController implements ICalculationController {
                 .operationCode(request.getOperationCode())
                 .build();
 
-        System.out.println(calculation + " is created.");
+        this.logger.info("Calculation is created.");
+
+        this.logger.debug("Created calculation: " + calculation);
 
         calculation = this.calculationRepository.save(calculation);
 
-        System.out.println(calculation + " is saved to database.");
+        this.logger.info("Calculation is saved to database.");
 
-        System.out.println(calculation + " is sending to Kafka.");
+        this.logger.debug("Saved calculation: " + calculation);
+
+        this.logger.info("Calculation is sending to Kafka using producer.");
 
         this.calculationKafkaProducer.send(calculation.getId(), calculation);
+
+        this.logger.info("Calculation is sent to Kafka using producer.");
 
         return ResponseEntity.status(HttpStatus.OK.value())
                 .contentType(MediaType.APPLICATION_JSON)

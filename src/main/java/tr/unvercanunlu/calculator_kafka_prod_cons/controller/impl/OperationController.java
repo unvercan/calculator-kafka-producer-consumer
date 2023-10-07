@@ -1,6 +1,8 @@
 package tr.unvercanunlu.calculator_kafka_prod_cons.controller.impl;
 
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -15,18 +17,27 @@ import tr.unvercanunlu.calculator_kafka_prod_cons.model.entity.Operation;
 import tr.unvercanunlu.calculator_kafka_prod_cons.repository.IOperationRepository;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequiredArgsConstructor
 @RequestMapping(path = ApiConfig.OPERATION_API)
 public class OperationController implements IOperationController {
 
+    private final Logger logger = LoggerFactory.getLogger(OperationController.class);
+
     private final IOperationRepository operationRepository;
 
     @Override
     @RequestMapping(method = RequestMethod.GET)
     public ResponseEntity<List<Operation>> getAll() {
+        this.logger.info("Get all operations request is received.");
+
         List<Operation> operations = this.operationRepository.findAll();
+
+        this.logger.debug("All operations: " + operations);
+
+        this.logger.info("All operations are fetched from the database.");
 
         return ResponseEntity.status(HttpStatus.OK.value())
                 .contentType(MediaType.APPLICATION_JSON)
@@ -36,8 +47,21 @@ public class OperationController implements IOperationController {
     @Override
     @RequestMapping(path = "/{code}", method = RequestMethod.GET)
     public ResponseEntity<Operation> get(@PathVariable(name = "code") Integer code) {
-        Operation operation = this.operationRepository.findById(code)
-                .orElseThrow(() -> new HttpClientErrorException(HttpStatus.NOT_FOUND));
+        this.logger.info("Get operation with " + code + " code request is received.");
+
+        Optional<Operation> optionalOperation = this.operationRepository.findById(code);
+
+        if (optionalOperation.isEmpty()) {
+            this.logger.info("Operation with " + code + " code is not found in the database.");
+
+            throw new HttpClientErrorException(HttpStatus.NOT_FOUND);
+        }
+
+        this.logger.info("Operation with " + code + " code  is fetched from the database.");
+
+        Operation operation = optionalOperation.get();
+
+        this.logger.debug("Fetched operation: " + operation);
 
         return ResponseEntity.status(HttpStatus.OK.value())
                 .contentType(MediaType.APPLICATION_JSON)

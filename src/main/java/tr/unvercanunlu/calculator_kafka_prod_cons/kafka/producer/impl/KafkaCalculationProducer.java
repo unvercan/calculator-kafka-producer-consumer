@@ -25,7 +25,7 @@ public class KafkaCalculationProducer implements IKafkaProducer<UUID, Calculatio
 
     @Override
     public void send(UUID key, Calculation value) {
-        this.logger.info("Kafka producer is started.");
+        this.logger.info("Kafka Calculation Producer is started.");
 
         CalculationMessage message = CalculationMessage.builder()
                 .first(value.getFirst())
@@ -33,14 +33,14 @@ public class KafkaCalculationProducer implements IKafkaProducer<UUID, Calculatio
                 .operationCode(value.getOperationCode())
                 .build();
 
-        this.logger.info("Calculation message is created.");
+        this.logger.info("Calculation Message is created from Calculation.");
 
-        this.logger.debug("Created calculation message: " + message);
+        this.logger.debug("Created Calculation Message: " + message);
 
         this.calculationMessageKafkaTemplate.send(this.calculationTopic, key.toString(), message);
 
-        this.logger.info("Kafka producer sent calculation message with " + key + " key as a record to " + this.calculationTopic + " topic.");
+        this.logger.info("Kafka Calculation Producer sent Calculation Message with " + key + " key as a new record to " + this.calculationTopic + " Kafka Topic.");
 
-        this.logger.info("Kafka producer is end.");
+        this.logger.info("Kafka Calculation Producer is end.");
     }
 }

@@ -93,11 +93,9 @@ public class CalculationController implements ICalculationController {
 
         this.logger.debug("Saved calculation: " + calculation);
 
-        this.logger.info("Calculation is sending to Kafka using producer.");
-
         this.calculationKafkaProducer.send(calculation.getId(), calculation);
 
-        this.logger.info("Calculation is sent to Kafka using producer.");
+        this.logger.info("Sending Calculation to Kafka Topic using Kafka Calculation Producer is done.");
 
         return ResponseEntity.status(HttpStatus.OK.value())
                 .contentType(MediaType.APPLICATION_JSON)

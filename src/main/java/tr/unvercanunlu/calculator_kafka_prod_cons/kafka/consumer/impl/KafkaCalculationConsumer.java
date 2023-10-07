@@ -19,9 +19,9 @@ import java.util.UUID;
 
 @Component
 @RequiredArgsConstructor
-public class KafkaCalculationMessageConsumer implements IKafkaConsumer<String, CalculationMessage> {
+public class KafkaCalculationConsumer implements IKafkaConsumer<String, CalculationMessage> {
 
-    private final Logger logger = LoggerFactory.getLogger(KafkaCalculationMessageConsumer.class);
+    private final Logger logger = LoggerFactory.getLogger(KafkaCalculationConsumer.class);
 
     private final ICalculationRepository calculationRepository;
 
@@ -33,9 +33,9 @@ public class KafkaCalculationMessageConsumer implements IKafkaConsumer<String, C
     @Override
     @KafkaListener(topics = "${spring.kafka.topic.calculation}", containerFactory = "calculationMessageListenerFactory", groupId = "${spring.kafka.group-id}")
     public void receive(ConsumerRecord<String, CalculationMessage> payload) {
-        this.logger.info("Kafka consumer is started.");
+        this.logger.info("Kafka Calculation Consumer is started.");
 
-        this.logger.info("Kafka consumer received new record from " + this.calculationTopic + " topic.");
+        this.logger.info("Kafka Calculation Consumer received a new record from " + this.calculationTopic + " Kafka Topic.");
 
         String key = payload.key();
         CalculationMessage value = payload.value();
@@ -110,6 +110,6 @@ public class KafkaCalculationMessageConsumer implements IKafkaConsumer<String, C
 
         this.logger.debug("Saved calculation: " + calculation);
 
-        this.logger.info("Kafka consumer is end.");
+        this.logger.info("Kafka Calculation Consumer is end.");
     }
 }

@@ -23,7 +23,7 @@ public class KafkaConsumerConfig {
     @Value(value = "${spring.kafka.group-id}")
     private String groupId;
 
-    private Map<String, Object> consumerConfigMap() {
+    public Map<String, Object> consumerConfigMap() {
         Map<String, Object> configMap = new HashMap<>();
 
         configMap.put(ConsumerConfig.GROUP_ID_CONFIG, this.groupId);

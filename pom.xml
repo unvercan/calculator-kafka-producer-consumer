@@ -14,13 +14,14 @@
     </parent>
 
     <groupId>tr.unvercanunlu</groupId>
-    <artifactId>calculator-kafka-prod-cons</artifactId>
+    <artifactId>calculator-kafka-producer-consumer</artifactId>
     <version>0.1</version>
 
-    <name>calculator-kafka-pub-sub</name>
+    <name>calculator-kafka-producer-consumer</name>
     <description>Calculator with Apache Kafka Producer-Consumer App</description>
 
-    <!-- Properties -->
+    <packaging>jar</packaging>
+
     <properties>
         <java.version>17</java.version>
         <java.version>17</java.version>

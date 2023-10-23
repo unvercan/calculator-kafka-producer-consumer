@@ -15,7 +15,7 @@
 
     <groupId>tr.unvercanunlu</groupId>
     <artifactId>calculator-kafka-producer-consumer</artifactId>
-    <version>0.1</version>
+    <version>1.0</version>
 
     <name>calculator-kafka-producer-consumer</name>
     <description>Calculator with Apache Kafka Producer-Consumer App</description>

@@ -17,18 +17,21 @@ import java.util.UUID;
 public class Calculation implements Serializable {
 
     @Id
-    @GeneratedValue
-    @Column(name = "id", updatable = false, nullable = false, unique = true)
+    @GeneratedValue(strategy = GenerationType.UUID)
+    @Column(name = "id")
     private UUID id;
 
-    @Column(name = "first", nullable = false)
+    @Column(name = "done")
+    private Boolean done;
+
+    @Column(name = "operation_code")
+    private Integer operationCode;
+
+    @Column(name = "first")
     private Integer first;
 
-    @Column(name = "second", nullable = false)
+    @Column(name = "second")
     private Integer second;
-
-    @Column(name = "operation_code", nullable = false)
-    private Integer operationCode;
 
     @Column(name = "result")
     private Double result;

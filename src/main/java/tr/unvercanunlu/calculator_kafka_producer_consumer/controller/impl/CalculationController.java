@@ -7,16 +7,13 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.client.HttpClientErrorException;
 import tr.unvercanunlu.calculator_kafka_producer_consumer.controller.ApiConfig;
 import tr.unvercanunlu.calculator_kafka_producer_consumer.controller.ICalculationController;
-import tr.unvercanunlu.calculator_kafka_producer_consumer.kafka.producer.IKafkaProducer;
-import tr.unvercanunlu.calculator_kafka_producer_consumer.model.entity.Calculation;
-import tr.unvercanunlu.calculator_kafka_producer_consumer.model.request.CalculationRequest;
-import tr.unvercanunlu.calculator_kafka_producer_consumer.repository.ICalculationRepository;
+import tr.unvercanunlu.calculator_kafka_producer_consumer.model.dto.CalculationDto;
+import tr.unvercanunlu.calculator_kafka_producer_consumer.model.request.CreateCalculationRequest;
+import tr.unvercanunlu.calculator_kafka_producer_consumer.service.ICalculationService;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
 @RestController
@@ -26,79 +23,43 @@ public class CalculationController implements ICalculationController {
 
     private final Logger logger = LoggerFactory.getLogger(CalculationController.class);
 
-    private final ICalculationRepository calculationRepository;
-
-    private final IKafkaProducer<UUID, Calculation> calculationKafkaProducer;
+    private final ICalculationService calculationService;
 
     @Override
-    @RequestMapping(method = RequestMethod.GET)
-    public ResponseEntity<List<Calculation>> getAll() {
-        this.logger.info("Get all calculations request is received.");
+    @PostMapping
+    public ResponseEntity<Void> create(@RequestBody CreateCalculationRequest request) {
+        this.logger.info("Create Calculation Request is received.");
 
-        List<Calculation> calculations = this.calculationRepository.findAll();
+        this.logger.debug("Received Create Calculation Request: " + request);
 
-        this.logger.debug("All calculations: " + calculations);
-
-        this.logger.info("All calculations are fetched from the database.");
-
-        return ResponseEntity.status(HttpStatus.OK.value())
-                .contentType(MediaType.APPLICATION_JSON)
-                .body(calculations);
-    }
-
-    @Override
-    @RequestMapping(path = "/{id}", method = RequestMethod.GET)
-    public ResponseEntity<Calculation> get(@PathVariable(name = "id") UUID id) {
-        this.logger.info("Get calculation with '" + id + "' id request is received.");
-
-        Optional<Calculation> optionalCalculation = this.calculationRepository.findById(id);
-
-        if (optionalCalculation.isEmpty()) {
-            this.logger.info("Calculation with '" + id + "' id is not found in the database.");
-
-            throw new HttpClientErrorException(HttpStatus.NOT_FOUND);
-        }
-
-        this.logger.info("Calculation with '" + id + "' id is fetched from the database.");
-
-        Calculation calculation = optionalCalculation.get();
-
-        this.logger.debug("Fetched calculation: " + calculation);
-
-        return ResponseEntity.status(HttpStatus.OK.value())
-                .contentType(MediaType.APPLICATION_JSON)
-                .body(calculation);
-    }
-
-    @Override
-    @RequestMapping(method = RequestMethod.POST)
-    public ResponseEntity<Void> create(@RequestBody CalculationRequest request) {
-        this.logger.info("Create calculation request is received.");
-
-        this.logger.debug("Calculation request: " + request);
-
-        Calculation calculation = Calculation.builder()
-                .first(request.getFirst())
-                .second(request.getSecond())
-                .operationCode(request.getOperationCode())
-                .build();
-
-        this.logger.info("Calculation is created.");
-
-        this.logger.debug("Created calculation: " + calculation);
-
-        calculation = this.calculationRepository.save(calculation);
-
-        this.logger.info("Calculation is saved to database.");
-
-        this.logger.debug("Saved calculation: " + calculation);
-
-        this.calculationKafkaProducer.send(calculation.getId(), calculation);
-
-        this.logger.info("Sending Calculation to Kafka Topic using Kafka Calculation Producer is done.");
+        this.calculationService.create(request);
 
         return ResponseEntity.status(HttpStatus.OK.value())
                 .contentType(MediaType.APPLICATION_JSON)
                 .build();
+    }
+
+    @Override
+    @GetMapping
+    public ResponseEntity<List<CalculationDto>> retrieveAll() {
+        this.logger.info("Retrieve ALl Calculations Request is received.");
+
+        List<CalculationDto> calculationDtoList = this.calculationService.retrieveAll();
+
+        return ResponseEntity.status(HttpStatus.OK.value())
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(calculationDtoList);
+    }
+
+    @Override
+    @GetMapping(path = "/{id}")
+    public ResponseEntity<CalculationDto> retrieve(@PathVariable(name = "id") UUID calculationId) {
+        this.logger.info("Retrieve Calculation with '" + calculationId + "' ID is received.");
+
+        CalculationDto calculationDto = this.calculationService.retrieve(calculationId);
+
+        return ResponseEntity.status(HttpStatus.OK.value())
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(calculationDto);
     }
 }

@@ -6,18 +6,16 @@ import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.client.HttpClientErrorException;
 import tr.unvercanunlu.calculator_kafka_producer_consumer.controller.ApiConfig;
 import tr.unvercanunlu.calculator_kafka_producer_consumer.controller.IOperationController;
 import tr.unvercanunlu.calculator_kafka_producer_consumer.model.entity.Operation;
-import tr.unvercanunlu.calculator_kafka_producer_consumer.repository.IOperationRepository;
+import tr.unvercanunlu.calculator_kafka_producer_consumer.service.IOperationService;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequiredArgsConstructor
@@ -26,42 +24,26 @@ public class OperationController implements IOperationController {
 
     private final Logger logger = LoggerFactory.getLogger(OperationController.class);
 
-    private final IOperationRepository operationRepository;
+    private final IOperationService operationService;
 
     @Override
-    @RequestMapping(method = RequestMethod.GET)
-    public ResponseEntity<List<Operation>> getAll() {
-        this.logger.info("Get all operations request is received.");
+    @GetMapping
+    public ResponseEntity<List<Operation>> retrieveAll() {
+        this.logger.info("Retrieve ALl Operations Request is received.");
 
-        List<Operation> operations = this.operationRepository.findAll();
-
-        this.logger.debug("All operations: " + operations);
-
-        this.logger.info("All operations are fetched from the database.");
+        List<Operation> operationList = this.operationService.retrieveAll();
 
         return ResponseEntity.status(HttpStatus.OK.value())
                 .contentType(MediaType.APPLICATION_JSON)
-                .body(operations);
+                .body(operationList);
     }
 
     @Override
-    @RequestMapping(path = "/{code}", method = RequestMethod.GET)
-    public ResponseEntity<Operation> get(@PathVariable(name = "code") Integer code) {
-        this.logger.info("Get operation with '" + code + "' code request is received.");
+    @GetMapping(path = "/{code}")
+    public ResponseEntity<Operation> retrieve(@PathVariable(name = "code") Integer operationCode) {
+        this.logger.info("Retrieve Operation with '" + operationCode + "' Code is received.");
 
-        Optional<Operation> optionalOperation = this.operationRepository.findById(code);
-
-        if (optionalOperation.isEmpty()) {
-            this.logger.info("Operation with '" + code + "' code is not found in the database.");
-
-            throw new HttpClientErrorException(HttpStatus.NOT_FOUND);
-        }
-
-        this.logger.info("Operation with '" + code + "' code  is fetched from the database.");
-
-        Operation operation = optionalOperation.get();
-
-        this.logger.debug("Fetched operation: " + operation);
+        Operation operation = this.operationService.retrieve(operationCode);
 
         return ResponseEntity.status(HttpStatus.OK.value())
                 .contentType(MediaType.APPLICATION_JSON)

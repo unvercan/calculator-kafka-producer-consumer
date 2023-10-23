@@ -46,8 +46,9 @@ spring:
 logging:
   level:
     root: info
+    tr.unvercanunlu.calculator_kafka_producer_consumer.service: debug
     tr.unvercanunlu.calculator_kafka_producer_consumer.kafka: debug
-    tr.unvercanunlu.calculator_kafka_producer_consumer.controller: trace
+    tr.unvercanunlu.calculator_kafka_producer_consumer.controller: debug
 
 # API Documentation (OpenAPI)
 springdoc:

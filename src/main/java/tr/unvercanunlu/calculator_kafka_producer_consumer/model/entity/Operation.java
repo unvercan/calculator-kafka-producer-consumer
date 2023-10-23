@@ -19,10 +19,10 @@ import java.io.Serializable;
 public class Operation implements Serializable {
 
     @Id
-    @Column(name = "code", updatable = false, nullable = false, unique = true)
+    @Column(name = "code")
     private Integer code;
 
-    @Column(name = "name", nullable = false)
+    @Column(name = "name")
     private String name;
 
 }
